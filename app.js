@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
+var pledges = require('./routes/pledges');
 
 var app = express();
 
@@ -18,7 +18,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+app.use('/pledges', pledges);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
