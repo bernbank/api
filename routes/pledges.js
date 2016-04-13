@@ -1,9 +1,19 @@
 var express = require('express');
 var router = express.Router();
 var PledgeService = require('../services/pledge-service');
+var MongoClient = require('mongodb').MongoClient;
+
+var pledgeService;
 
 var url = 'mongodb://localhost:27017/berniebank';
-var pledgeService = new PledgeService(url);
+MongoClient.connect(url, function(err, db){
+  if (err) {
+    throw err;
+  }
+  var pledges = db.collection('pledges');
+  pledgeService = new PledgeService(pledges);
+});
+
 
 router.post('/', function(req, res){
   pledgeService.createPledge(req.body)
