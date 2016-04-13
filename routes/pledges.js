@@ -1,36 +1,35 @@
 var express = require('express');
-var router = express.Router();
+var config = require('../config/config');
+var MongoCache = require('../util/mongo-cache');
+var PledgesController = require('../controllers/pledges-controller');
 var PledgeService = require('../services/pledge-service');
-var MongoClient = require('mongodb').MongoClient;
+var router = express.Router();
 
-var pledgeService;
-
-var url = 'mongodb://localhost:27017/berniebank';
-MongoClient.connect(url, function(err, db){
-  if (err) {
-    throw err;
-  }
-  var pledges = db.collection('pledges');
-  pledgeService = new PledgeService(pledges);
+router.post('/', (req, res) => {
+  var mongoCache = new MongoCache();
+  mongoCache.getDb(config.mongo.connectionString).then((db) => {
+    var pledgeService = new PledgeService(db);
+    var pledgesController = new PledgesController(pledgeService);
+    pledgesController.createPledge(req, res);
+  }).catch((e) => res.status(500).send(e.toString()));
 });
 
-
-router.post('/', function(req, res){
-  pledgeService.createPledge(req.body)
-      .then((pledge) => res.json(pledge))
-      .catch((e) => res.status(500).send(e));
+router.get('/:id', (req, res) => {
+  var mongoCache = new MongoCache();
+  mongoCache.getDb(config.mongo.connectionString).then((db) => {
+    var pledgeService = new PledgeService(db);
+    var pledgesController = new PledgesController(pledgeService);
+    pledgesController.getPledge(req, res);
+  }).catch((e) => res.status(500).send(e.toString()));
 });
 
-router.get('/:id', function(req, res) {
-  pledgeService.getPledge(req.params.id)
-      .then((pledge) => res.json(pledge))
-      .catch((e) => res.status(500).send(e));
-});
-
-router.delete('/:id', function(req, res) {
-  pledgeService.deletePledge(req.params.id)
-      .then(() => res.status(204).send())
-      .catch((e) => res.status(500).send(e));
+router.delete('/:id', (req, res) => {
+  var mongoCache = new MongoCache();
+  mongoCache.getDb(config.mongo.connectionString).then((db) => {
+    var pledgeService = new PledgeService(db);
+    var pledgesController = new PledgesController(pledgeService);
+    pledgesController.deletePledge(req, res);
+  }).catch((e) => res.status(500).send(e.toString()));
 });
 
 module.exports = router;

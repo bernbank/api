@@ -4,8 +4,8 @@ var ObjectId = require('mongodb').ObjectID;
 
 class PledgeService {
 
-    constructor(collection) {
-        this.pledges = collection;
+    constructor(db) {
+        this.pledges = db.collection('pledges');
     }
 
     createPledge(pledge) {
