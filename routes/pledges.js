@@ -1,38 +1,23 @@
 var express = require('express');
 var router = express.Router();
-var MongoClient = require('mongodb').MongoClient;
-var ObjectId = require('mongodb').ObjectID;
+var PledgeService = require('../services/pledge-service');
 
 var url = 'mongodb://localhost:27017/berniebank';
+var pledgeService = new PledgeService(url);
 
 router.post('/', function(req, res){
-  MongoClient.connect(url, function(err, db){
-    var pledges = db.collection('pledges');
-    pledges.insertOne(req.body, function(err, record){
-      res.json(record.ops[0]);
-      db.close();
-    });
-  });
+  pledgeService.createPledge(req.body)
+      .then((pledge) => res.json(pledge));
 });
 
 router.get('/:id', function(req, res) {
-  MongoClient.connect(url, function (err, db) {
-    var pledges = db.collection('pledges');
-    pledges.find({"_id": new ObjectId(req.params.id)}).limit(1).next(function(err, doc){
-      res.json(doc);
-      db.close();
-    });
-  });
+  pledgeService.getPledge(req.params.id)
+      .then((pledge) => res.json(pledge));
 });
 
 router.delete('/:id', function(req, res) {
-  MongoClient.connect(url, function (err, db) {
-    var pledges = db.collection('pledges');
-    pledges.deleteOne({"_id": new ObjectId(req.params.id)}, function(err, result){
-      res.status(204).send();
-      db.close();
-    });
-  });
+  pledgeService.deletePledge(req.params.id)
+      .then(() => res.status(204).send());
 });
 
 module.exports = router;
