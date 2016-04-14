@@ -1,5 +1,7 @@
 'use strict';
 
+var precond = require('precond');
+
 class PledgesController {
 
     constructor(pledgeService) {
@@ -9,12 +11,24 @@ class PledgesController {
     createPledge(req, res) {
         this.pledgeService.createPledge(req.body)
             .then((pledge) => res.json(pledge))
-            .catch((e) => res.status(500).send(e));
+            .catch((e) => {
+                if (e instanceof precond.IllegalArgumentError) {
+                    res.status(400).send(e);
+                } else {
+                    res.status(500).send(e);
+                }
+            });
     }
 
     getPledge(req, res) {
         this.pledgeService.getPledge(req.params.id)
-            .then((pledge) => res.json(pledge))
+            .then((pledge) => {
+                if (pledge) {
+                    res.json(pledge);
+                } else {
+                    res.status(404).send("Pledge not found");
+                }
+            })
             .catch((e) => res.status(500).send(e));
     }
 

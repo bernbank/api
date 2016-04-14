@@ -1,6 +1,6 @@
 'use strict';
-
-var ObjectId = require('mongodb').ObjectID;
+var precond = require('precond');
+var validator = require('validator');
 
 class PledgeService {
 
@@ -10,6 +10,13 @@ class PledgeService {
 
     createPledge(pledge) {
         return new Promise((resolve, reject) => {
+
+            precond.checkArgument(pledge, 'Pledge cannot be null or undefined');
+            precond.checkArgument(typeof pledge === 'object' && !Array.isArray(pledge), 'Pledge must be an object');
+            precond.checkArgument(Object.keys(pledge).length > 0, 'Pledge cannot be empty');
+            precond.checkArgument(pledge.email, 'Pledge must have an associated email property');
+            precond.checkArgument(validator.isEmail(pledge.email), 'Pledge must have a valid formatted email address');
+
             this.pledges.insertOne(pledge).then(function (record) {
                 resolve(record.ops[0]);
             }).catch((err) => {
@@ -20,7 +27,7 @@ class PledgeService {
 
     getPledge(id) {
         return new Promise((resolve, reject) => {
-            this.pledges.find({"_id": new ObjectId(id)}).limit(1).next().then(function (doc) {
+            this.pledges.find({"email": id}).limit(1).next().then(function (doc) {
                 resolve(doc);
             }).catch((err) => {
                 reject(err);
@@ -30,7 +37,7 @@ class PledgeService {
 
     deletePledge(id) {
         return new Promise((resolve, reject) => {
-            this.pledges.deleteOne({"_id": new ObjectId(id)}).then(function (result) {
+            this.pledges.deleteOne({"email": id}).then(function (result) {
                 resolve();
             }).catch((err) => {
                 reject(err);
