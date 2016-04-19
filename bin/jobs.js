@@ -11,24 +11,14 @@ module.exports = {
             var mongoCache = new MongoCache();
             mongoCache.getDb(config.mongo.connectionString).then((db) => {
                 var berniePbClient = new BerniePbClient();
-                var yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD');
-                berniePbClient.getCallersAboveThresholdByDate(yesterday, config.callThreshold).then((callers) => {
-                    console.log('Successfully fetched callers above threshold by date');
-                    var dailyCallLogService = new DailyCallLogService(db);
-                    var dailyCallLog = {
-                        date: yesterday,
-                        callers: callers
-                    };
-                    dailyCallLogService.saveDailyCallLog(dailyCallLog).then(() => {
-                        console.log('Saved daily call log');
-                    }).catch((err) => {
-                        console.error('Failed to save daily call log');
-                        console.error(err.stack);
-                    })
+                var yesterday = moment().subtract(1, 'day').toDate();
+                var dailyCallLogService = new DailyCallLogService(db, berniePbClient);
+                dailyCallLogService.saveDailyCallLog(yesterday).then(() => {
+                    console.log('Saved daily call log');
                 }).catch((err) => {
-                    console.error('Failed to fetch callers above threshold by date');
+                    console.error('Failed to save daily call log');
                     console.error(err.stack);
-                });
+                })
             }).catch((err) => {
                 console.error('Failed to get mongo db connection');
                 console.error(err.stack);

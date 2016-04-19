@@ -1,14 +1,24 @@
 'use strict';
+var moment = require('moment');
+var config = require('../config/config');
 
 class DailyCallLogService {
-    constructor(db) {
+    constructor(db, berniePbClient) {
         this.dailyCallLogs = db.collection('dailyCallLog');
+        this.berniePbClient = berniePbClient;
     }
 
-    saveDailyCallLog(dailyCallLog) {
+    saveDailyCallLog(date) {
         return new Promise((resolve, reject) => {
-            this.dailyCallLogs.updateOne(dailyCallLog, {upsert: true}).then(() => {
-                resolve();
+            var dateString = moment(date).format('YYYY-MM-DD');
+            this.berniePbClient.getCallersAboveThresholdByDate(dateString, config.callThreshold).then((callers) => {
+                var dailyCallLog = {
+                    date: dateString,
+                    callers: callers
+                };
+                this.dailyCallLogs.updateOne(dailyCallLog, {upsert: true}).then(() => {
+                    resolve();
+                }).catch(reject);
             }).catch(reject);
         });
     }
