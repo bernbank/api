@@ -6,20 +6,20 @@
 Creates a new pledge entity in the collection
 #### Request
 ##### Schema
-```
+```json
 {
-    "email": String (required),
-    "amount": Number (required)
+    "email": "string (required)",
+    "amount": "number (required)"
 }
 ```
 
 #### Responses
 * 200 OK
-```
+```json
 {
-    "_id": UUID,
-    "email": String,
-    "amount": Number
+    "_id": "uuid",
+    "email": "string",
+    "amount": "number"
 }
 ```
 * 400 Pledge cannot be null or undefined
@@ -35,11 +35,11 @@ Fetches a pledge by email address
 * email - The user's email address
 #### Responses
 * 200 OK
-```
+```json
 {
-    "_id": UUID,
-    "email": String,
-    "amount": Number
+    "_id": "uuid",
+    "email": "string",
+    "amount": "number"
 }
 ```
 * 404 Pledge not found
