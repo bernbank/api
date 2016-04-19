@@ -33,6 +33,7 @@ Fetches a pledge by email address
 #### Request
 ##### Params
 * email - The user's email address
+
 #### Responses
 * 200 OK
 ```json
