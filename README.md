@@ -96,8 +96,10 @@ npm install
 npm install mongodb
 ```
 
-
-
+* Start Application with 
+```
+npm install start
+```
 
 
 
