@@ -64,3 +64,45 @@ Fetches and stores caller data from BerniePB by date
 
 #### Responses
 * 204 No Content
+
+## Installation
+* Install the latest NodeJS version (on Ubuntu):
+```
+curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+* Clone repository
+```
+git clone https://github.com/bernbank/api.git
+```
+
+* Enter API directory
+```
+cd api
+```
+
+* Install dependencies in package.json 
+```
+npm install
+```
+
+* Install mongodb on your server following these instructions (Ubuntu) : https://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
+
+* Import sample mongodb dataset locally.
+
+* Install mongodb library for node
+```
+npm install mongodb
+```
+
+
+
+
+
+
+
+
+
+
+
