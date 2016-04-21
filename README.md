@@ -101,6 +101,8 @@ npm install mongodb
 npm install start
 ```
 
+* Viw the API running: http://localhost:3000/
+
 
 
 
