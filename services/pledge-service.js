@@ -16,6 +16,7 @@ class PledgeService {
             precond.checkArgument(Object.keys(pledge).length > 0, 'Pledge cannot be empty');
             precond.checkArgument(pledge.email, 'Pledge must have an associated email property');
             precond.checkArgument(validator.isEmail(pledge.email), 'Pledge must have a valid formatted email address');
+	    pledge.added = new Date();
 
             this.pledges.insertOne(pledge).then(function (record) {
                 resolve(record.ops[0]);
