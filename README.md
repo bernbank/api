@@ -89,7 +89,11 @@ npm install
 
 * Install mongodb on your server following these instructions (Ubuntu) : https://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
 
-* Import sample mongodb dataset locally.
+*  To import a sample mongodb dataset locally, run the following PUT request form Python's command line interface (You need to have Requests library installed)
+```
+import requests
+r = requests.put('http://localhost:3000/dailyCallLogs/2016-04-21');
+```
 
 * Install mongodb library for node
 ```
