@@ -37,6 +37,24 @@ class PledgesController {
             .then(() => res.status(204).send())
             .catch((e) => res.status(500).send(e));
     }
+
+    /**
+     * Returns yesterday's pledges
+     **/
+    getYesterdayPledges(req, res) {
+      this.pledgeService.getYesterdayPledges()
+        .then( (pledges) =>  {
+          if (pledges) {
+            res.json(pledges);
+          } else {
+            res.json({total: 0});
+          }
+        })
+        .catch((e) => {
+           res.status(500).send(e);
+         });
+    }
+
 }
 
 module.exports = PledgesController;

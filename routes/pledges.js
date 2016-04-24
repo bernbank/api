@@ -5,6 +5,22 @@ var PledgesController = require('../controllers/pledges-controller');
 var PledgeService = require('../services/pledge-service');
 var router = express.Router();
 
+/** 
+ * Finds the total number of pledges that were made yesterday
+ **/
+router.get('/yesterday', (req, res) => {
+  var mongoCache = new MongoCache();
+    mongoCache.getDb(config.mongo.connectionString).then(  (db) => {
+      var pledgeService = new PledgeService(db);
+      var pledgesController = new PledgesController(pledgeService);
+      pledgesController.getYesterdayPledges(req, res);
+    }).catch( (e) => {
+      res.status(500).send(e.toString());
+    } );
+
+});
+
+
 router.post('/', (req, res) => {
   var mongoCache = new MongoCache();
   mongoCache.getDb(config.mongo.connectionString).then((db) => {
@@ -31,5 +47,7 @@ router.delete('/:id', (req, res) => {
     pledgesController.deletePledge(req, res);
   }).catch((e) => res.status(500).send(e.toString()));
 });
+
+
 
 module.exports = router;

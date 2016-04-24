@@ -1,6 +1,7 @@
 'use strict';
 var precond = require('precond');
 var validator = require('validator');
+var moment = require('moment');
 
 class PledgeService {
 
@@ -35,6 +36,34 @@ class PledgeService {
             });
         });
     }
+
+    /**
+     * Gets the total number of pledges from yesterday.
+     **/
+    getYesterdayPledges() {
+      return new Promise((resolve, reject) => {
+        var yesterdayStart = moment().startOf('day').subtract(1,'days').toDate();
+        var yesterdayEnd = moment().endOf('day').subtract(1,'days').toDate();
+        var query = {
+          'added' : {"$gte" : yesterdayStart, '$lte' : yesterdayEnd  }
+        };
+	var pledges = [];
+        var totalPledges = 0;
+
+        this.pledges.find(query, (err,thing) => {
+            thing.each( (err, doc) => {
+              if (doc != null) {
+                pledges.push(doc);
+		totalPledges += 1;
+              } else {
+                resolve( {"total": totalPledges}  );
+              }
+          });
+        });
+      });
+    }
+
+
 
     deletePledge(id) {
         return new Promise((resolve, reject) => {
