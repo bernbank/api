@@ -54,6 +54,19 @@ Deletes a pledge by email address
 #### Responses
 * 204 No Content
 
+
+### GET /pledges/yesterday
+Gets the total number of pledges done yesterday.
+#### Request
+##### Params
+* No parameters needed
+#### Responses
+* 200 OK
+```json
+{"total":"number"}'
+```
+
+
 ## Daily Call Logs Collection
 
 ### PUT /dailyCallLogs/:date
