@@ -69,6 +69,17 @@ Gets the total number of pledges done on a specific date.
 ```
 
 
+### GET /pledges/?total
+Gets the total number of pledges of all time.
+#### Request
+##### Params
+* Query parameter 'total' is required
+#### Responses
+* 200 OK
+```json
+{"total":"number"}'
+
+
 ## Daily Call Logs Collection
 
 ### PUT /dailyCallLogs/:date

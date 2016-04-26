@@ -56,6 +56,24 @@ class PledgesController {
          });
     }
 
+    /**
+     * Gets the total amount of pledges in the database
+     **/
+    getTotalPledges(req, res) {
+      this.pledgeService.getTotalPledges()
+        .then( (pledges) =>  {
+          if (pledges) {
+            res.json(pledges);
+          } else {
+            res.json({total: 0});
+          }
+        })
+        .catch((e) => {
+           res.status(500).send(e);
+         });
+    }
+
+
 }
 
 module.exports = PledgesController;

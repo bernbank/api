@@ -80,6 +80,21 @@ class PledgeService {
     }
 
 
+    /**
+     * Gets the total number of pledges from all time
+     **/
+    getTotalPledges() {
+      return new Promise((resolve, reject) => {
+          this.pledges.count().then((data) => {
+            resolve( {"total": data}  );
+          }).catch( (e) => {
+            reject(e);
+          });
+        
+      });
+    }
+
+
 
     deletePledge(id) {
         return new Promise((resolve, reject) => {
