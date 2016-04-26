@@ -21,9 +21,15 @@ class PledgeService {
             precond.checkArgument(Object.keys(pledge).length > 0, 'Pledge cannot be empty');
             precond.checkArgument(pledge.email, 'Pledge must have an associated email property');
             precond.checkArgument(validator.isEmail(pledge.email), 'Pledge must have a valid formatted email address');
+            precond.checkArgument(pledge.amount, 'Pledge amount must be present');
+            precond.checkArgument(validator.isInt(pledge.amount + "", {min:1, max:10000}), 'Pledge amout must be an integer between 1 and 10000');
+           
 	    pledge.added = new Date();
 
-            this.pledges.update({'email' : pledge.email }, pledge,  {upsert:true} ).then((record) => {
+            var query = {
+                'email' : pledge.email,
+            }
+            this.pledges.update(query, pledge,  {upsert:true} ).then((record) => {
                 var prom = this.getPledge(pledge.email);
                 prom.then((data) => {
                     resolve(data);

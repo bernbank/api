@@ -9,7 +9,7 @@ Creates a new pledge entity in the collection
 ```json
 {
     "email": "string (required)",
-    "amount": "number (required)"
+    "amount": "integer (required) (Amount of cents to pledge)"
 }
 ```
 
@@ -27,6 +27,8 @@ Creates a new pledge entity in the collection
 * 400 Pledge cannot be empty
 * 400 Pledge must have an associated email property
 * 400 Pledge must have a valid formatted email address
+* 400 Pledge must have an amount present
+* 400 Pledge must be an integer from 1 to 10000.
 
 ### GET /pledges/:email
 Fetches a pledge by email address
