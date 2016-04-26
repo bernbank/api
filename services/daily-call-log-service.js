@@ -14,6 +14,7 @@ class DailyCallLogService {
             this.berniePbClient.getCallersAboveThresholdByDate(dateString, config.callThreshold).then((callers) => {
                 var dailyCallLog = {
                     date: dateString,
+                    total: callers.length,
                     callers: callers
                 };
                 this.dailyCallLogs.update({date: dateString} , dailyCallLog , {upsert: true}).then(() => {
