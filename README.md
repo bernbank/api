@@ -99,11 +99,11 @@ Gets the total number of Ring Makers of all time
 #### Responses
 * 200 OK
 ```json
-{ total: "number",
-  data: 
+{ "total": "number",
+  "data": 
    [ 
-       { _id: "uuid",  date: "string", total: "number" },
-       { _id: "uuid",  date: "string", total: "number" }
+       { "_id": "uuid",  "date": "string", "total": "number" },
+       { "_id": "uuid",  "date": "string", "total": "number" }
    ] 
 }
 ```
