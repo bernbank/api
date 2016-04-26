@@ -79,7 +79,10 @@ Gets the total number of pledges of all time.
 #### Responses
 * 200 OK
 ```json
-{"total":"number"}'
+{ 
+  "total":"number",
+  "amount" : "number", 
+}'
 ```
 
 ## Daily Call Logs Collection

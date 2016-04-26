@@ -85,12 +85,23 @@ class PledgeService {
      **/
     getTotalPledges() {
       return new Promise((resolve, reject) => {
-          this.pledges.count().then((data) => {
-            resolve( {"total": data}  );
-          }).catch( (e) => {
-            reject(e);
+          var totalPledges = 0;
+          var totalAmount = 0;
+          this.pledges.find({}, (err,thing) => {
+              thing.each( (err, doc) => {
+                if (doc != null) {
+                    totalPledges += 1;
+                    if (validator.isInt( doc['amount'] + "")) {
+                        totalAmount += doc['amount'];
+                    } else {
+                        totalAmount += 1;
+                    }
+                } else {
+                    resolve( {"total": totalPledges, "amount": totalAmount}  );
+                }
+              });
           });
-        
+       
       });
     }
 
