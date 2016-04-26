@@ -2,7 +2,7 @@
 
 ## Pledges Collection
 
-### PUT /pledges
+### PUT /pledges/:email
 Creates a new pledge entity in the collection
 #### Request
 ##### Schema
