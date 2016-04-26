@@ -17,6 +17,17 @@ class DailyCallLogsController {
             res.status(500).send(e)
         });
     }
+
+    /**
+     * Gets the total number of ringmakers of all time
+     **/
+    getAllTimeTotal(req, res) {
+       this.dailyCallLogService.getAllTimeTotal().then( (data) => {
+            res.status(200).send(data);
+       }).catch((e) => {
+           res.status(500).send(e);
+       });
+    }
 }
 
 module.exports = DailyCallLogsController;

@@ -91,6 +91,25 @@ Fetches and stores caller data from BerniePB by date
 #### Responses
 * 204 No Content
 
+### GET /dailyCallLogs/total
+Gets the total number of Ring Makers of all time
+#### Request
+##### Params
+
+#### Responses
+* 200 OK
+```json
+{ total: "number",
+  data: 
+   [ 
+       { _id: "uuid",  date: "string", total: "number" },
+       { _id: "uuid",  date: "string", total: "number" }
+   ] 
+}
+```
+* 404 Pledge not found
+
+
 ## Installation
 * Install the latest NodeJS version (on Ubuntu):
 ```

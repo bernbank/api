@@ -23,6 +23,27 @@ class DailyCallLogService {
             }).catch(reject);
         });
     }
+
+    getAllTimeTotal() {
+        return new Promise((resolve, reject) => {
+            this.dailyCallLogs.find({}, {_id: true, date:true, total:true} , (err, thing) => {
+                if (err != null) {
+                    // There was an error, let's report it
+                    reject(e);
+                }
+                var output = { total: 0 , data: [] };
+                thing.each( (err,doc) => {
+                    if (doc != null) {
+                        output['total'] += doc['total'];
+                        output['data'].push(doc);
+                    } else {
+                        resolve(output);
+                    }
+                });
+            });
+        });
+    }
+
 }
 
 module.exports = DailyCallLogService;
