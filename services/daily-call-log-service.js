@@ -16,7 +16,7 @@ class DailyCallLogService {
                     date: dateString,
                     callers: callers
                 };
-                this.dailyCallLogs.updateOne(dailyCallLog, {upsert: true}).then(() => {
+                this.dailyCallLogs.update({date: dateString} , dailyCallLog , {upsert: true}).then(() => {
                     resolve();
                 }).catch(reject);
             }).catch(reject);
