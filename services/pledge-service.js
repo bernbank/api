@@ -9,6 +9,10 @@ class PledgeService {
         this.pledges = db.collection('pledges');
     }
 
+
+    /**
+     * Creates a new pledge in the Database
+     **/
     createPledge(pledge) {
         return new Promise((resolve, reject) => {
 
@@ -19,11 +23,17 @@ class PledgeService {
             precond.checkArgument(validator.isEmail(pledge.email), 'Pledge must have a valid formatted email address');
 	    pledge.added = new Date();
 
-            this.pledges.insertOne(pledge).then(function (record) {
-                resolve(record.ops[0]);
+            this.pledges.update({'email' : pledge.email }, pledge,  {upsert:true} ).then((record) => {
+                var prom = this.getPledge(pledge.email);
+                prom.then((data) => {
+                    resolve(data);
+                }).catch((e) => {
+                    reject(e);
+                });
             }).catch((err) => {
                 reject(err);
             });
+
         });
     }
 
