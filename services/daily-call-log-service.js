@@ -44,6 +44,30 @@ class DailyCallLogService {
         });
     }
 
+    getTotalByDate(date) {
+        return new Promise((resolve, reject) => {
+            var dateString = moment(date).format('YYYY-MM-DD');
+            var query = {
+                date: dateString
+            };
+            var output = {};
+            this.dailyCallLogs.find(query, {_id: true, date:true, total:true}, (err, thing) =>  {
+                if (err != null) {
+                    // There was an error, let's report it
+                    reject(e);
+                }
+                thing.each( (err,doc) => {
+                    if (doc != null) {
+                        output = doc;
+                    } else {
+                        resolve(output);
+                    }
+                });
+            });
+
+        });
+    }
+
 }
 
 module.exports = DailyCallLogService;

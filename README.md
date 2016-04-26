@@ -112,6 +112,25 @@ Gets the total number of Ring Makers of all time
 * 404 Pledge not found
 
 
+### GET /dailyCallLogs/total?date=YYYY-MM-DD
+Gets the total number of Ring Makers of all time
+#### Request
+##### Params
+* date  - Date in format YYYY-MM-DD
+
+#### Responses
+* 200 OK
+```json
+{
+    "_id": "uuid",
+    "date": "string",
+    "total": "integer"
+}
+```
+
+* 404 Pledge not found
+
+
 ## Installation
 * Install the latest NodeJS version (on Ubuntu):
 ```

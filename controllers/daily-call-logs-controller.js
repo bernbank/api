@@ -28,6 +28,19 @@ class DailyCallLogsController {
            res.status(500).send(e);
        });
     }
+    /**
+     * Gets the total number of ringmakers for a specific date
+     **/
+     getTotalByDate(req, res) {
+         var dateString = req.query.date;
+         var date = moment(dateString, 'YYYY-MM-DD').toDate();
+         this.dailyCallLogService.getTotalByDate(date).then( (data) => {
+             res.status(200).send(data);
+          }).catch((e) => {
+             res.status(500).send(e);
+         });
+    }
+
 }
 
 module.exports = DailyCallLogsController;
