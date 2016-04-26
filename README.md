@@ -2,7 +2,7 @@
 
 ## Pledges Collection
 
-### POST /pledges
+### PUT /pledges
 Creates a new pledge entity in the collection
 #### Request
 ##### Schema
