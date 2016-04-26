@@ -40,12 +40,12 @@ class PledgeService {
     /**
      * Gets the total number of pledges from yesterday.
      **/
-    getYesterdayPledges() {
+    getPledgesByDay(strDate) {
       return new Promise((resolve, reject) => {
-        var yesterdayStart = moment().startOf('day').subtract(1,'days').toDate();
-        var yesterdayEnd = moment().endOf('day').subtract(1,'days').toDate();
+        var desiredDateStart = moment(strDate, "YYYYMMDD").startOf('day').toDate();
+        var desiredDateEnd = moment(strDate, "YYYYMMDD").endOf('day').toDate();
         var query = {
-          'added' : {"$gte" : yesterdayStart, '$lte' : yesterdayEnd  }
+          'added' : {"$gte" : desiredDateStart, '$lte' : desiredDateEnd  }
         };
 	var pledges = [];
         var totalPledges = 0;

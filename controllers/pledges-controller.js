@@ -41,8 +41,9 @@ class PledgesController {
     /**
      * Returns yesterday's pledges
      **/
-    getYesterdayPledges(req, res) {
-      this.pledgeService.getYesterdayPledges()
+    getPledgesByDay(req, res) {
+      var strDate = req.query['date'];
+      this.pledgeService.getPledgesByDay(strDate)
         .then( (pledges) =>  {
           if (pledges) {
             res.json(pledges);

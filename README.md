@@ -55,11 +55,11 @@ Deletes a pledge by email address
 * 204 No Content
 
 
-### GET /pledges/yesterday
-Gets the total number of pledges done yesterday.
+### GET /pledges/?date=YYYY-MM-DD
+Gets the total number of pledges done on a specific date.
 #### Request
 ##### Params
-* No parameters needed
+* Query parameter 'date' is required and needs to have the format YYYY-MM-DD
 #### Responses
 * 200 OK
 ```json

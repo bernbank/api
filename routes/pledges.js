@@ -8,18 +8,22 @@ var router = express.Router();
 /** 
  * Finds the total number of pledges that were made yesterday
  **/
-router.get('/yesterday', (req, res) => {
-  var mongoCache = new MongoCache();
+router.get('/', (req, res) => {
+  if (req.query['date'] == undefined) {
+    res.status(500).send('{"message":"No date specified","error":{"status":500}}');
+  } else {
+    var mongoCache = new MongoCache();
     mongoCache.getDb(config.mongo.connectionString).then(  (db) => {
       var pledgeService = new PledgeService(db);
       var pledgesController = new PledgesController(pledgeService);
-      pledgesController.getYesterdayPledges(req, res);
+      pledgesController.getPledgesByDay(req, res);
     }).catch( (e) => {
       res.status(500).send(e.toString());
     } );
 
-});
+  }
 
+});
 
 router.post('/', (req, res) => {
   var mongoCache = new MongoCache();
