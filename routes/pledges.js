@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
     if (req.query['total'] != undefined) {
       pledgesController.getTotalPledges(req, res);
     } else if (req.query['historic'] != undefined) {
-      //pledgesController.getHistoricPledges(req, res);
+      pledgesController.getHistoricPledges(req, res);
     } else if (req.query['date'] != undefined) {
       pledgesController.getPledgesByDay(req, res);
     }

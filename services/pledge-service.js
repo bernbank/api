@@ -106,6 +106,39 @@ class PledgeService {
     }
 
 
+    /**
+     * Gets the historic pledges per day from all time.
+     **/
+    getHistoricPledges() {
+      return new Promise((resolve, reject) => {
+          var historicData = [];
+          var dictDates = {};
+          this.pledges.find({}, (err,thing) => {
+              thing.each( (err, doc) => {
+                  if (doc != null) {
+                      var stringDate = moment(doc['added']).format("YYYY-MM-DD");
+                      if (dictDates[stringDate] == undefined) {
+                          dictDates[stringDate] = {total:1, amount: doc['amount'] , date:stringDate };
+                      } else {
+                          dictDates[stringDate]['total'] += 1;
+                          if (doc['amount'] == undefined) {
+                              dictDates[stringDate]['amount'] += 1;
+                          } else {
+                              dictDates[stringDate]['amount'] += doc['amount'];
+                          }
+                      }
+                  } else {
+                      for (var key in dictDates) {
+                          historicData.push(dictDates[key]);
+                      }
+                      resolve(  historicData  );
+                  }
+              });
+          });
+
+      });
+    }
+
 
     deletePledge(id) {
         return new Promise((resolve, reject) => {

@@ -85,6 +85,25 @@ Gets the total number of pledges of all time.
 }'
 ```
 
+### GET /pledges/?historic
+Gets the total number of pledges for every day from all time
+#### Request
+
+##### Params
+* Query parameter 'historic' is required
+
+#### Responses
+* 200 OK
+```json
+[
+  {
+    "total": "number",
+    "amount": "number",
+    "date": "string"
+  },
+]
+```
+
 ## Daily Call Logs Collection
 
 ### PUT /dailyCallLogs/:date

@@ -73,6 +73,24 @@ class PledgesController {
          });
     }
 
+    /**
+     * Gets the historical number pledges per day in the database
+     **/
+    getHistoricPledges(req, res) {
+      this.pledgeService.getHistoricPledges()
+        .then( (pledges) =>  {
+          if (pledges) {
+            res.json(pledges);
+          } else {
+            res.json([]);
+          }
+        })
+        .catch((e) => {
+          res.status(500).send(e);
+        });
+    }
+
+
 
 }
 
