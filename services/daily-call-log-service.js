@@ -58,47 +58,43 @@ class DailyCallLogService {
             });
 
 
-/*
-            this.dailyCallLogs.find({}, {_id: true, date:true, total:true} , (err, thing) => {
-                if (err != null) {
-                    // There was an error, let's report it
-                    reject(e);
-                }
-                var output = { total: 0 , data: [] };
-                thing.each( (err,doc) => {
-                    if (doc != null) {
-                        output['total'] += doc['total'];
-                        output['data'].push(doc);
-                    } else {
-                        resolve(output);
-                    }
-                });
-            });
-*/
-
         });
     }
 
     getTotalByDate(date) {
         return new Promise((resolve, reject) => {
             var dateString = moment(date).format('YYYY-MM-DD');
-            var query = {
-                date: dateString
-            };
-            var output = {};
-            this.dailyCallLogs.find(query, {_id: true, date:true, total:true}, (err, thing) =>  {
-                if (err != null) {
-                    // There was an error, let's report it
-                    reject(e);
-                }
-                thing.each( (err,doc) => {
-                    if (doc != null) {
-                        output = doc;
+            simpleNodeCache.get("dailycall-totaldate-" + dateString, (err, value) => {
+                if (!err) {
+                    if (value != undefined) {
+			console.log("Cache hit!!");
+                        resolve(value);
                     } else {
-                        resolve(output);
+
+                        var query = {
+                            date: dateString
+                        };
+                        var output = {};
+                        this.dailyCallLogs.find(query, {_id: true, date:true, total:true}, (err, thing) =>  {
+                            if (err != null) {
+                                // There was an error, let's report it
+                                reject(e);
+                            }
+                            thing.each( (err,doc) => {
+                                if (doc != null) {
+                                    output = doc;
+                                } else {
+                                    simpleNodeCache.set( "dailycall-totaldate-" + dateString, output ,  (err, success) => {}); 
+                                    resolve(output);
+                                }
+                            });
+                        });
+
                     }
-                });
+                }
             });
+
+
 
         });
     }
