@@ -2,6 +2,9 @@
 var precond = require('precond');
 var validator = require('validator');
 var moment = require('moment');
+var config = require('../config/config');
+var NodeCache = require('node-cache');
+var simpleNodeCache = new NodeCache(config.nodeCache);
 
 class PledgeService {
 
@@ -58,24 +61,37 @@ class PledgeService {
      **/
     getPledgesByDay(strDate) {
       return new Promise((resolve, reject) => {
-        var desiredDateStart = moment(strDate, "YYYYMMDD").startOf('day').toDate();
-        var desiredDateEnd = moment(strDate, "YYYYMMDD").endOf('day').toDate();
-        var query = {
-          'added' : {"$gte" : desiredDateStart, '$lte' : desiredDateEnd  }
-        };
-	var pledges = [];
-        var totalPledges = 0;
+        simpleNodeCache.get("pledges-day-" + strDate, (err, value) => {
+          if (!err) {
+            if (value != undefined) {
+              resolve(value);
+            } else {
 
-        this.pledges.find(query, (err,thing) => {
-            thing.each( (err, doc) => {
-              if (doc != null) {
-                pledges.push(doc);
-		totalPledges += 1;
-              } else {
-                resolve( {"total": totalPledges}  );
-              }
-          });
+              var desiredDateStart = moment(strDate, "YYYYMMDD").startOf('day').toDate();
+              var desiredDateEnd = moment(strDate, "YYYYMMDD").endOf('day').toDate();
+              var query = {
+                'added' : {"$gte" : desiredDateStart, '$lte' : desiredDateEnd  }
+              };
+              var pledges = [];
+              var totalPledges = 0;
+   
+              this.pledges.find(query, (err,thing) => {
+                  thing.each( (err, doc) => {
+                    if (doc != null) {
+                      pledges.push(doc);
+                      totalPledges += 1;
+                    } else {
+                      simpleNodeCache.set("pledges-day-" + strDate, {"total": totalPledges},  (err, success) => {
+                      });
+                      resolve( {"total": totalPledges}  );
+                    }
+                });
+              });
+
+            }
+          }
         });
+
       });
     }
 
