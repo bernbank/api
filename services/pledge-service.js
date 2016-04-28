@@ -101,23 +101,34 @@ class PledgeService {
      **/
     getTotalPledges() {
       return new Promise((resolve, reject) => {
-          var totalPledges = 0;
-          var totalAmount = 0;
-          this.pledges.find({}, (err,thing) => {
-              thing.each( (err, doc) => {
-                if (doc != null) {
-                    totalPledges += 1;
-                    if (validator.isInt( doc['amount'] + "")) {
-                        totalAmount += doc['amount'];
-                    } else {
-                        totalAmount += 1;
-                    }
-                } else {
-                    resolve( {"total": totalPledges, "amount": totalAmount}  );
-                }
+
+        simpleNodeCache.get("pledges-total", (err, value) => {
+          if (!err) {
+            if (value != undefined) {
+              resolve(value);
+            } else {
+              var totalPledges = 0;
+              var totalAmount = 0;
+              this.pledges.find({}, (err,thing) => {
+                  thing.each( (err, doc) => {
+                      if (doc != null) {
+                          totalPledges += 1;
+                          if (validator.isInt( doc['amount'] + "")) {
+                              totalAmount += doc['amount'];
+                          } else {
+                              totalAmount += 1;
+                          }
+                      } else {
+                          simpleNodeCache.set("pledges-total", {"total": totalPledges, "amount": totalAmount} ,  (err, success) => {});
+                          resolve( {"total": totalPledges, "amount": totalAmount}  );
+                      }
+                  });
               });
-          });
-       
+
+            }
+          }
+        });
+ 
       });
     }
 
