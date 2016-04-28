@@ -1,6 +1,9 @@
 'use strict';
 var moment = require('moment');
 var config = require('../config/config');
+var NodeCache = require('node-cache');
+var simpleNodeCache = new NodeCache(config.nodeCache);
+
 
 class DailyCallLogService {
     constructor(db, berniePbClient) {
@@ -26,6 +29,36 @@ class DailyCallLogService {
 
     getAllTimeTotal() {
         return new Promise((resolve, reject) => {
+
+            simpleNodeCache.get("dailycall-alltime", (err, value) => {
+                if (!err) {
+                    if (value != undefined) {
+                        resolve(value);
+                    } else {
+
+                        this.dailyCallLogs.find({}, {_id: true, date:true, total:true} , (err, thing) => {
+                            if (err != null) {
+                                 // There was an error, let's report it
+                                reject(e);
+                            }
+                            var output = { total: 0 , data: [] };
+                            thing.each( (err,doc) => {
+                                if (doc != null) {
+                                    output['total'] += doc['total'];
+                                    output['data'].push(doc);
+                                } else {
+                                    simpleNodeCache.set("dailycall-alltime", output ,  (err, success) => {});
+                                    resolve(output);
+                                }
+                            });
+                        });
+
+                    }
+                }
+            });
+
+
+/*
             this.dailyCallLogs.find({}, {_id: true, date:true, total:true} , (err, thing) => {
                 if (err != null) {
                     // There was an error, let's report it
@@ -41,6 +74,8 @@ class DailyCallLogService {
                     }
                 });
             });
+*/
+
         });
     }
 
