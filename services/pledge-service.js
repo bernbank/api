@@ -138,6 +138,46 @@ class PledgeService {
      **/
     getHistoricPledges() {
       return new Promise((resolve, reject) => {
+        simpleNodeCache.get("pledges-historic", (err, value) => {
+          if (!err) {
+            if (value != undefined) {
+              resolve(value);
+            } else {
+
+              var historicData = [];
+              var dictDates = {};
+              this.pledges.find({}, (err,thing) => {
+                  thing.each( (err, doc) => {
+                      if (doc != null) {
+                          var stringDate = moment(doc['added']).format("YYYY-MM-DD");
+                          if (dictDates[stringDate] == undefined) {
+                              dictDates[stringDate] = {total:1, amount: doc['amount'] , date:stringDate };
+                          } else {
+                              dictDates[stringDate]['total'] += 1;
+                              if (doc['amount'] == undefined) {
+                                  dictDates[stringDate]['amount'] += 1;
+                              } else {
+                                  dictDates[stringDate]['amount'] += doc['amount'];
+                              }
+                          }
+                      } else {
+                          for (var key in dictDates) {
+                              historicData.push(dictDates[key]);
+                          }
+                          simpleNodeCache.set("pledges-historic", historicData  ,  (err, success) => {});
+                          resolve(  historicData  );
+                      }
+                  });
+              });
+
+
+
+            }
+          }
+        });
+
+
+/*
           var historicData = [];
           var dictDates = {};
           this.pledges.find({}, (err,thing) => {
@@ -162,6 +202,8 @@ class PledgeService {
                   }
               });
           });
+*/
+
 
       });
     }
