@@ -37,6 +37,18 @@ class MailingController {
             });
     }
 
+    /**
+     * Sends emails to all the active emails in the mailinglist collection.
+     **/
+    sendEmails(req, res) {
+        this.mailingService.sendEmails()
+            .then(() => {
+                res.status(200).send();
+            }).catch((e) => {
+                res.status(500).send(e);
+            });
+    }
+
 
 }
 

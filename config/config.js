@@ -6,4 +6,5 @@ module.exports = {
     },
     callThreshold: 50,
     nodeCache: { stdTTL: 600, checkperiod: 605 } ,
+    amazonSES: { key: 'key', secret: 'secret' }
 };

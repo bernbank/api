@@ -2,6 +2,8 @@
 
 var config = require('../config/config');
 var async = require('async');
+var ses = require('node-ses');
+var pug = require('pug');
 
 class MailingService {
 
@@ -84,6 +86,62 @@ class MailingService {
 		});
 	}
 
+
+    /**
+     * Sends a single email to a single user
+     **/
+    sendSingleEmail(clientSES, data) {
+        var strTemplateHTML = pug.renderFile('./views/email-html.pug', data );
+        var strTemplateTEXT = pug.renderFile('./views/email-text.pug', data );
+        var objEmail =  {
+            to: data.email,
+            from: 'berniesanders@gmail.com',
+            subject: 'Support bernie!!',
+            message: strTemplateHTML,
+            altText: strTemplateTEXT
+        };
+        console.log(objEmail);
+        /*
+           clientSES.sendEmail(data, (err, data, res) => {
+           console.log("EMAIL SENT!!!"); 
+        });
+        */ 
+    }
+
+    /**
+    * Sends emails tall users in the mailinglist collection
+    **/
+    sendEmails() {
+        return new Promise( (resolve, reject) => {
+            var client = ses.createClient(config.amazonSES);
+
+            // Find all available emails and send emails to those guys :)
+			var query = {active:true};
+			this.mailinglist.find(query, (err, thing) => {				
+				if (err != null) {
+					 // There was an error, let's report it
+					reject(e);
+				}
+				
+				thing.each( (err,doc) => {
+					
+					if (err != null) {
+						 // There was an error, let's report it
+						reject(err);
+					}
+
+					if (doc != null) {
+                        this.sendSingleEmail(client,  doc);
+					} else {
+						resolve();
+					}
+				});
+						
+			});
+
+        });
+
+    }
 
 }
 

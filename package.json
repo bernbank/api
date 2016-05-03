@@ -16,6 +16,7 @@
     "validator": "^5.2.0",
     "node-cache": "^3.2.1",
     "node-ses": "~1.2.0",
-    "async" : "^2.0.0-rc.3"
+    "async" : "^2.0.0-rc.3",
+    "pug" : "^2.0.0-alpha6"
   }
 }
