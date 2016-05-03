@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 
 var pledges = require('./routes/pledges');
 var dailyCallLogs = require('./routes/daily-call-logs');
+var mailing = require('./routes/mailing');
 
 var app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 
 app.use('/pledges', pledges);
 app.use('/dailyCallLogs', dailyCallLogs);
+app.use('/mailing', mailing);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

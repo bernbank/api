@@ -14,6 +14,7 @@
     "precond": "^0.2.3",
     "request": "^2.71.0",
     "validator": "^5.2.0",
-    "node-cache": "^3.2.1"
+    "node-cache": "^3.2.1",
+    "node-ses": "~1.2.0"
   }
 }
