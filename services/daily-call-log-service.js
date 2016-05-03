@@ -43,6 +43,12 @@ class DailyCallLogService {
                             }
                             var output = { total: 0 , data: [] };
                             thing.each( (err,doc) => {
+								
+								if (err != null) {
+									 // There was an error, let's report it
+									reject(err);
+								}
+								
                                 if (doc != null) {
                                     output['total'] += doc['total'];
                                     output['data'].push(doc);
