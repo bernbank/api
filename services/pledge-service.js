@@ -10,6 +10,7 @@ class PledgeService {
 
     constructor(db) {
         this.pledges = db.collection('pledges');
+        this.mailing = db.collection('mailinglist');
     }
 
 
@@ -27,7 +28,35 @@ class PledgeService {
             precond.checkArgument(pledge.amount, 'Pledge amount must be present');
             precond.checkArgument(validator.isInt(pledge.amount + "", {min:1, max:10000}), 'Pledge amout must be an integer between 1 and 10000');
            
-	    pledge.added = new Date();
+            pledge.added = new Date();
+
+            var query = {
+                'email' : pledge.email,
+            }
+            // Adding pledge email to mailing list
+            this.mailing.find(query , (err, thing) => {
+                
+                if (err == null) {
+                    var nTotal = 0;
+                    var email = { email: pledge.email , active: true} ;
+                    thing.each( (err, doc) => {
+                        if (doc == null) {
+                            if (nTotal == 0) {
+                                // This is a new email, we add it to mailing list
+                                this.mailing.insertOne(email, (err, result) => {
+                                    // Inserted email successfully or not
+                                });
+                            } else {
+                                // Email already exists
+                            }
+                        } else {
+                            // Email already exists
+                            nTotal += 1;
+                        }
+                    });
+                }
+                
+            });
 
             var query = {
                 'email' : pledge.email,
@@ -175,34 +204,6 @@ class PledgeService {
             }
           }
         });
-
-
-/*
-          var historicData = [];
-          var dictDates = {};
-          this.pledges.find({}, (err,thing) => {
-              thing.each( (err, doc) => {
-                  if (doc != null) {
-                      var stringDate = moment(doc['added']).format("YYYY-MM-DD");
-                      if (dictDates[stringDate] == undefined) {
-                          dictDates[stringDate] = {total:1, amount: doc['amount'] , date:stringDate };
-                      } else {
-                          dictDates[stringDate]['total'] += 1;
-                          if (doc['amount'] == undefined) {
-                              dictDates[stringDate]['amount'] += 1;
-                          } else {
-                              dictDates[stringDate]['amount'] += doc['amount'];
-                          }
-                      }
-                  } else {
-                      for (var key in dictDates) {
-                          historicData.push(dictDates[key]);
-                      }
-                      resolve(  historicData  );
-                  }
-              });
-          });
-*/
 
 
       });

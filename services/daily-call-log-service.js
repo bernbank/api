@@ -73,7 +73,6 @@ class DailyCallLogService {
             simpleNodeCache.get("dailycall-totaldate-" + dateString, (err, value) => {
                 if (!err) {
                     if (value != undefined) {
-			console.log("Cache hit!!");
                         resolve(value);
                     } else {
 
