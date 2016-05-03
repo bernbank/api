@@ -42,6 +42,26 @@ class MailingService {
 		
 	}
 
+
+	/**
+	 * (Soft) deletes en email from the mailinglist collection
+	 **/
+	deleteEmail(strEmail) {
+		return new Promise((resolve, reject) => {
+			var query = {email: strEmail};
+			
+			this.mailinglist.update(query, {"$set" : {active: false} }, (err, results) => {
+				if (err != null) {
+					reject(err);
+				} else {
+					resolve();
+				}
+			});			
+		});
+	}
+
+
+
 }
 
 module.exports = MailingService;

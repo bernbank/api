@@ -16,6 +16,17 @@ class MailingController {
         
     }
 
+    /**
+     * (Soft) delets an email from the  mailinglist collection
+     **/
+    deleteEmail(req, res) {
+        this.mailingService.deleteEmail(req.params.email)
+            .then((email) => res.json(email))
+            .catch((e) => res.status(500).send(e));
+    }
+
+
+
 }
 
 module.exports = MailingController;

@@ -42,17 +42,17 @@ router.put('/', (req, res) => {
 
 
 /**
- * (Soft) deletes en email from the database.
+ * (Soft) deletes en email from the  mailinglist collection
  **/
 router.delete('/:email', (req, res) => {
-  /*
+
   var mongoCache = new MongoCache();
   mongoCache.getDb(config.mongo.connectionString).then((db) => {
-    var pledgeService = new PledgeService(db);
-    var pledgesController = new PledgesController(pledgeService);
-    pledgesController.deletePledge(req, res);
+    var mailingService = new MailingService(db);
+    var mailingController = new MailingController(mailingService);
+    mailingController.deleteEmail(req, res);
   }).catch((e) => res.status(500).send(e.toString()));
-  */
+  
 });
 
 
