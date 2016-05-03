@@ -6,60 +6,10 @@ var MailingService = require('../services/mailing-service');
 
 var router = express.Router();
 
-/** 
- * Returns all active emails that we are going to send emails to.
- **/
-router.get('/', (req, res) => {
-  
-  var mongoCache = new MongoCache();
-  mongoCache.getDb(config.mongo.connectionString).then(  (db) => {
-    var mailingService = new MailingService(db);
-    var mailingController = new MailingController(mailingService);
-
-    mailingController.getActiveEmails(req, res);
-  }).catch( (e) => {
-    res.status(500).send(e.toString());
-  });
-  
-
-});
-
-/**
- * Allows you to insert a bulk of emails into the database.
- **/
-router.put('/', (req, res) => {
-  
-  /*
-  var mongoCache = new MongoCache();
-  mongoCache.getDb(config.mongo.connectionString).then((db) => {
-    var pledgeService = new PledgeService(db);
-    var pledgesController = new PledgesController(pledgeService);
-    pledgesController.createPledge(req, res);
-  }).catch((e) => res.status(500).send(e.toString()));
-  */
-  
-});
-
-
-/**
- * (Soft) deletes en email from the  mailinglist collection
- **/
-router.delete('/:email', (req, res) => {
-
-  var mongoCache = new MongoCache();
-  mongoCache.getDb(config.mongo.connectionString).then((db) => {
-    var mailingService = new MailingService(db);
-    var mailingController = new MailingController(mailingService);
-    mailingController.deleteEmail(req, res);
-  }).catch((e) => res.status(500).send(e.toString()));
-  
-});
-
-
 /**
  * Sends an email to all users
  **/
-router.post('/', (req, res) => {
+router.get('/send', (req, res) => {
   
   console.log("___ helooooooooO _________");
   
@@ -106,6 +56,59 @@ router.post('/', (req, res) => {
   res.status(200).send('All good!!!');
   
 });
+
+
+
+/** 
+ * Returns all active emails that we are going to send emails to.
+ **/
+router.get('/', (req, res) => {
+  
+  var mongoCache = new MongoCache();
+  mongoCache.getDb(config.mongo.connectionString).then(  (db) => {
+    var mailingService = new MailingService(db);
+    var mailingController = new MailingController(mailingService);
+
+    mailingController.getActiveEmails(req, res);
+  }).catch( (e) => {
+    res.status(500).send(e.toString());
+  });
+  
+
+});
+
+/**
+ * Allows you to insert a bulk of emails into the database.
+ **/
+router.post('/', (req, res) => {
+
+  var mongoCache = new MongoCache();
+  mongoCache.getDb(config.mongo.connectionString).then((db) => {
+    var mailingService = new MailingService(db);
+    var mailingController = new MailingController(mailingService);
+    mailingController.insertEmails(req, res);
+  }).catch((e) => {
+    res.status(500).send(e.toString()) ;
+  });
+  
+});
+
+
+/**
+ * (Soft) deletes en email from the  mailinglist collection
+ **/
+router.delete('/:email', (req, res) => {
+
+  var mongoCache = new MongoCache();
+  mongoCache.getDb(config.mongo.connectionString).then((db) => {
+    var mailingService = new MailingService(db);
+    var mailingController = new MailingController(mailingService);
+    mailingController.deleteEmail(req, res);
+  }).catch((e) => res.status(500).send(e.toString()));
+  
+});
+
+
 
 
 

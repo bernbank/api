@@ -1,7 +1,7 @@
 'use strict';
 
 var config = require('../config/config');
-
+var async = require('async');
 
 class MailingService {
 
@@ -60,6 +60,29 @@ class MailingService {
 		});
 	}
 
+
+	/**
+	 * (Soft) deletes en email from the mailinglist collection
+	 **/
+	insertEmails(emails) {
+		return new Promise((resolve, reject) => {
+			var bulk = this.mailinglist.initializeUnorderedBulkOp();
+
+			async.each(emails, (email, callback) => {
+				email["active"] = true;
+				bulk.insert(email);
+				callback();
+			}, 
+			(err) => {
+
+				bulk.execute((err, result) => {
+					resolve();
+				});
+			
+			});
+			
+		});
+	}
 
 
 }

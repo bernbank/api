@@ -17,7 +17,7 @@ class MailingController {
     }
 
     /**
-     * (Soft) delets an email from the  mailinglist collection
+     * (Soft) deletes an email from the  mailinglist collection
      **/
     deleteEmail(req, res) {
         this.mailingService.deleteEmail(req.params.email)
@@ -25,6 +25,17 @@ class MailingController {
             .catch((e) => res.status(500).send(e));
     }
 
+    /**
+     * Bulk insert of emails in the mailinglist tollection
+     **/
+    insertEmails(req, res) {
+        this.mailingService.insertEmails(req.body)
+            .then(() => {
+                res.status(200).send();
+            }).catch((e) => {
+                res.status(500).send(e);
+            });
+    }
 
 
 }
