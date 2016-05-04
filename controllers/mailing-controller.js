@@ -41,7 +41,11 @@ class MailingController {
      * Sends emails to all the active emails in the mailinglist collection.
      **/
     sendEmails(req, res) {
-        this.mailingService.sendEmails()
+        var strDryRunEmail = "";
+        if (req.query['dryrun'] != undefined) {
+            strDryRunEmail = req.query['dryrun'];
+        }
+        this.mailingService.sendEmails(strDryRunEmail)
             .then(() => {
                 res.status(200).send();
             }).catch((e) => {

@@ -111,33 +111,39 @@ class MailingService {
     /**
     * Sends emails tall users in the mailinglist collection
     **/
-    sendEmails() {
+    sendEmails(strDryRunEmail) {
         return new Promise( (resolve, reject) => {
             var client = ses.createClient(config.amazonSES);
 
-            // Find all available emails and send emails to those guys :)
-			var query = {active:true};
-			this.mailinglist.find(query, (err, thing) => {				
-				if (err != null) {
-					 // There was an error, let's report it
-					reject(e);
-				}
-				
-				thing.each( (err,doc) => {
-					
+			if (strDryRunEmail == "") {
+				// Find all available emails and send emails to those guys :)
+				var query = {active:true};
+				this.mailinglist.find(query, (err, thing) => {				
 					if (err != null) {
 						 // There was an error, let's report it
-						reject(err);
+						reject(e);
 					}
-
-					if (doc != null) {
-                        this.sendSingleEmail(client,  doc);
-					} else {
-						resolve();
-					}
+					thing.each( (err,doc) => {
+						if (err != null) {
+							 // There was an error, let's report it
+							reject(err);
+						}
+						if (doc != null) {
+							this.sendSingleEmail(client,  doc);
+						} else {
+							resolve();
+						}
+					});		
 				});
-						
-			});
+			} else {
+				this.sendSingleEmail(client,  {
+					firstname: 'Dry',
+					lastname : 'Runner',
+					email: strDryRunEmail
+				});
+				resolve();
+			}
+
 
         });
 
