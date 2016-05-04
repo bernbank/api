@@ -26,6 +26,7 @@ router.get('/send', (req, res) => {
 /** 
  * Returns all active emails that we are going to send emails to.
  **/
+/*
 router.get('/', (req, res) => {
   
   var mongoCache = new MongoCache();
@@ -40,6 +41,7 @@ router.get('/', (req, res) => {
   
 
 });
+*/
 
 /**
  * Allows you to insert a bulk of emails into the database.
