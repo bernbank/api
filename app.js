@@ -22,9 +22,9 @@ app.use(function(req, res, next) {
 });
 
 
-app.use('/pledges', pledges);
-app.use('/dailyCallLogs', dailyCallLogs);
-app.use('/mailing', mailing);
+app.use('/api/pledges', pledges);
+app.use('/api/dailyCallLogs', dailyCallLogs);
+app.use('/api/mailing', mailing);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
