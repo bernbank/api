@@ -153,6 +153,60 @@ Gets the total number of Ring Makers of all time
 * 404 Pledge not found
 
 
+## Mailing list
+
+### GET /api/mailing/unsubscribe/:email 
+Removes an email from mailing ist.
+#### Request
+##### Params
+* email - The email to be deleted from the database
+
+#### Responses
+* 301 Redirects to http://berniebank.com
+
+### DELETE /api/mailing/:email
+Removes an email from mailing ist.
+#### Request
+##### Params
+* email - The email to be deleted from the database
+
+#### Responses
+* 200 OK
+
+```json 
+{
+    "_id": "uuid",  
+    "email": "string", 
+    "active": "boolean" 
+    "firstname": "number" 
+    "lastname": "number" 
+}
+```
+
+
+### POST /api/mailing/  
+Inserts a bunch of emails into the database.
+#### Request
+##### Params
+```json
+[ 
+   {"email": "string", "firstname": "number", "lastname": "number"  },
+   {"email": "string", "firstname": "number", "lastname": "number"  }
+] 
+```
+#### Responses
+* 200 OK
+
+### GET /api/mailing/send  
+Send emails to all  users
+#### Request
+##### Params
+
+#### Responses
+* 200 OK
+
+
+
 ## Installation
 * Install the latest NodeJS version (on Ubuntu):
 ```
