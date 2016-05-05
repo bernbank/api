@@ -7,7 +7,10 @@ var MailingService = require('../services/mailing-service');
 var router = express.Router();
 
 
-var deleteEmails = (req, res) => {
+/**
+ * (Soft) deletes en email from the  mailinglist collection
+ **/
+router.delete('/:email', (req, res) => {
 
   var mongoCache = new MongoCache();
   mongoCache.getDb(config.mongo.connectionString).then((db) => {
@@ -16,17 +19,21 @@ var deleteEmails = (req, res) => {
     mailingController.deleteEmail(req, res);
   }).catch((e) => res.status(500).send(e.toString()));
   
-};
-
-/**
- * (Soft) deletes en email from the  mailinglist collection
- **/
-router.delete('/:email',  deleteEmails);
+});
 
 /**
  * (Soft) deletes en email from the  mailinglist collection via a GET parameter
  **/
-router.get('/unsubscribe/:email',  deleteEmails);
+router.get('/unsubscribe/:email',  (req, res) => {
+
+  var mongoCache = new MongoCache();
+  mongoCache.getDb(config.mongo.connectionString).then((db) => {
+    var mailingService = new MailingService(db);
+    var mailingController = new MailingController(mailingService);
+    mailingController.unsubscribeEmail(req, res);
+  }).catch((e) => res.status(500).send(e.toString()));
+  
+});
 
 
 /**

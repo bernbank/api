@@ -25,6 +25,18 @@ class MailingController {
             .catch((e) => res.status(500).send(e));
     }
 
+
+    /**
+     * (Soft) deletes an email from the  mailinglist collection
+     **/
+    unsubscribeEmail(req, res) {
+        this.mailingService.deleteEmail(req.params.email)
+            .then((email) => {
+                res.redirect(301, 'http://bernbank.com/');
+            })
+            .catch((e) => res.status(500).send(e));
+    }
+
     /**
      * Bulk insert of emails in the mailinglist tollection
      **/
