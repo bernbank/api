@@ -2,7 +2,7 @@
 
 ## Pledges Collection
 
-### PUT /pledges/:email
+### PUT /api/pledges/:email
 Creates a new pledge entity in the collection
 #### Request
 ##### Schema
@@ -30,7 +30,7 @@ Creates a new pledge entity in the collection
 * 400 Pledge must have an amount present
 * 400 Pledge must be an integer from 1 to 10000.
 
-### GET /pledges/:email
+### GET /api/pledges/:email
 Fetches a pledge by email address
 #### Request
 ##### Params
@@ -47,7 +47,7 @@ Fetches a pledge by email address
 ```
 * 404 Pledge not found
 
-### DELETE /pledges/:email
+### DELETE /api/pledges/:email
 Deletes a pledge by email address
 #### Request
 ##### Params
@@ -57,7 +57,7 @@ Deletes a pledge by email address
 * 204 No Content
 
 
-### GET /pledges/?date=YYYY-MM-DD
+### GET /api/pledges/?date=YYYY-MM-DD
 Gets the total number of pledges done on a specific date.
 #### Request
 ##### Params
@@ -69,7 +69,7 @@ Gets the total number of pledges done on a specific date.
 ```
 
 
-### GET /pledges/?total
+### GET /api/pledges/?total
 Gets the total number of pledges of all time.
 #### Request
 
@@ -85,7 +85,7 @@ Gets the total number of pledges of all time.
 }'
 ```
 
-### GET /pledges/?historic
+### GET /api/pledges/?historic
 Gets the total number of pledges for every day from all time
 #### Request
 
@@ -106,7 +106,7 @@ Gets the total number of pledges for every day from all time
 
 ## Daily Call Logs Collection
 
-### PUT /dailyCallLogs/:date
+### PUT /api/dailyCallLogs/:date
 Fetches and stores caller data from BerniePB by date
 #### Request
 ##### Params
@@ -115,7 +115,7 @@ Fetches and stores caller data from BerniePB by date
 #### Responses
 * 204 No Content
 
-### GET /dailyCallLogs/total
+### GET /api/dailyCallLogs/total
 Gets the total number of Ring Makers of all time
 #### Request
 ##### Params
@@ -134,7 +134,7 @@ Gets the total number of Ring Makers of all time
 * 404 Pledge not found
 
 
-### GET /dailyCallLogs/total?date=YYYY-MM-DD
+### GET /api/dailyCallLogs/total?date=YYYY-MM-DD
 Gets the total number of Ring Makers of all time
 #### Request
 ##### Params
@@ -180,7 +180,7 @@ npm install
 *  To import a sample mongodb dataset locally, run the following PUT request form Python's command line interface (You need to have Requests library installed)
 ```
 import requests
-r = requests.put('http://localhost:3000/dailyCallLogs/2016-04-21');
+r = requests.put('http://localhost:3000/api/dailyCallLogs/2016-04-21');
 ```
 
 * Install mongodb library for node
@@ -193,7 +193,7 @@ npm install mongodb
 npm install start
 ```
 
-* Viw the API running: http://localhost:3000/
+* View the API running: http://localhost:3000/api/
 
 
 
