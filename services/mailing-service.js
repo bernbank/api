@@ -95,17 +95,16 @@ class MailingService {
         var strTemplateTEXT = pug.renderFile('./views/email-text.pug', data );
         var objEmail =  {
             to: data.email,
-            from: 'berniesanders@gmail.com',
+            from: 'no-reply@bernbank.com',
             subject: 'Support bernie!!',
             message: strTemplateHTML,
             altText: strTemplateTEXT
         };
-        console.log(objEmail);
-        /*
-           clientSES.sendEmail(data, (err, data, res) => {
-           console.log("EMAIL SENT!!!"); 
+        
+        clientSES.sendEmail(data, (err, data, res) => {
+           //console.log("EMAIL SENT!!!"); 
         });
-        */ 
+
     }
 
     /**

@@ -217,7 +217,7 @@ ol li {
 }
 
 .unsubscribe a:visited , .unsubscribe a{
-  color: white;
+  color: white !important;
 }
 
 .unsubscribe a:hover {
