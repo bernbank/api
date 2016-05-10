@@ -101,7 +101,7 @@ class MailingService {
             altText: strTemplateTEXT
         };
         
-        clientSES.sendEmail(data, (err, data, res) => {
+        clientSES.sendEmail(objEmail, (err, data, res) => {
            //console.log("EMAIL SENT!!!"); 
         });
 
