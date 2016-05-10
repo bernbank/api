@@ -34,7 +34,7 @@ router.get('/', (req, res) => {
 
 });
 
-router.put('/:id', (req, res) => {
+router.post('/:id', (req, res) => {
   var mongoCache = new MongoCache();
   mongoCache.getDb(config.mongo.connectionString).then((db) => {
     var pledgeService = new PledgeService(db);

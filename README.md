@@ -2,7 +2,7 @@
 
 ## Pledges Collection
 
-### PUT /api/pledges/:email
+### POST /api/pledges/:email
 Creates a new pledge entity in the collection
 #### Request
 ##### Schema
