@@ -206,6 +206,14 @@ Send emails to all  users
 * 200 OK
 
 
+### GET /api/mailing/send?dryrun=target@gmail.com
+Send a single email to just to the email in the 'dryrun' parameter.
+#### Request
+##### Params
+* dryrun - The email target where the test email will be delivered.
+#### Responses
+* 200 OK
+
 
 ## Installation
 * Install the latest NodeJS version (on Ubuntu):
