@@ -143,7 +143,7 @@ class PledgeService {
                       if (doc != null) {
                           totalPledges += 1;
                           if (validator.isInt( doc['amount'] + "")) {
-                              totalAmount += doc['amount'];
+                              totalAmount += parseInt(doc['amount']);
                           } else {
                               totalAmount += 1;
                           }
