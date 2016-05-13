@@ -112,7 +112,7 @@ class PledgeService {
                     } else {
                       simpleNodeCache.set("pledges-day-" + strDate, {"total": totalPledges},  (err, success) => {
                       });
-                      resolve( {"total": totalPledges}  );
+                      resolve( {"total": totalPledges, "call_threshold" : config.callThreshold}  );
                     }
                 });
               });

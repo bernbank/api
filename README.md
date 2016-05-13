@@ -65,7 +65,10 @@ Gets the total number of pledges done on a specific date.
 #### Responses
 * 200 OK
 ```json
-{"total":"number"}'
+{
+  "total":"number",
+  "call_threshold" : "number"
+}'
 ```
 
 
