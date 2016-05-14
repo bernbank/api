@@ -6,5 +6,5 @@ module.exports = {
     },
     callThreshold: 30,
     nodeCache: { stdTTL: 600, checkperiod: 605 } ,
-    amazonSES: { key: 'key', secret: 'secret' }
+    amazonSES: { key: process.env.SES_KEY, secret: process.env.SES_SECRET }
 };
