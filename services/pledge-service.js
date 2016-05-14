@@ -10,7 +10,6 @@ class PledgeService {
 
     constructor(db) {
         this.pledges = db.collection('pledges');
-        this.mailing = db.collection('mailinglist');
     }
 
 
@@ -32,39 +31,12 @@ class PledgeService {
             pledge.emailSubscribed = true;
 
             var query = {
-                'email' : pledge.email,
-            }
-            // Adding pledge email to mailing list
-            /*  /// Disabled this for now. We are going to ditch mailing completely.
-            this.mailing.find(query , (err, thing) => {
-                
-                if (err == null) {
-                    var nTotal = 0;
-                    var email = { email: pledge.email , active: true} ;
-                    thing.each( (err, doc) => {
-                        if (doc == null) {
-                            if (nTotal == 0) {
-                                // This is a new email, we add it to mailing list
-                                this.mailing.insertOne(email, (err, result) => {
-                                    // Inserted email successfully or not
-                                });
-                            } else {
-                                // Email already exists
-                            }
-                        } else {
-                            // Email already exists
-                            nTotal += 1;
-                        }
-                    });
-                }
-                
-            });
-			*/
-
-            var query = {
-                'email' : pledge.email,
-            }
-            this.pledges.update(query, pledge,  {upsert:true} ).then((record) => {
+                'email' : pledge.email
+            };
+            var options = {
+                upsert: true
+            };
+            this.pledges.update(query, pledge, options).then((record) => {
                 var prom = this.getPledge(pledge.email);
                 prom.then((data) => {
                     resolve(data);
@@ -219,6 +191,24 @@ class PledgeService {
                 resolve();
             }).catch((err) => {
                 reject(err);
+            });
+        });
+    }
+
+    /**
+     * (Soft) deletes en email from the mailinglist collection
+     **/
+    unsubscribeFromEmails(strEmail) {
+        return new Promise((resolve, reject) => {
+            var query = {email: strEmail};
+
+            //this.mailinglist.update(query, {"$set" : {active: false} }, (err, results) => {
+            this.pledges.update(query, {"$set" : {emailSubscribed: false} }, (err, results) => {
+                if (err != null) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
             });
         });
     }

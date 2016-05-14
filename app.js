@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 
 var pledges = require('./routes/pledges');
 var dailyCallLogs = require('./routes/daily-call-logs');
-var mailing = require('./routes/mailing');
+var actions = require('./routes/actions');
 
 var app = express();
 
@@ -26,7 +26,7 @@ app.use(function(req, res, next) {
 
 app.use('/api/pledges', pledges);
 app.use('/api/dailyCallLogs', dailyCallLogs);
-app.use('/api/mailing', mailing);
+app.use('/actions', actions);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

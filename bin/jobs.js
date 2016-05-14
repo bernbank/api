@@ -4,7 +4,8 @@ var config = require('../config/config');
 var MongoCache = require('../util/mongo-cache');
 var BerniePbClient = require('../api_clients/bernie-pb-client');
 var DailyCallLogService = require('../services/daily-call-log-service');
-var AWS = require('aws-sdk');
+var ses = require('node-ses');
+var pug = require('pug');
 
 module.exports = {
     setupJobs: () => {
@@ -26,31 +27,25 @@ module.exports = {
             });
         }, null, true, 'America/Detroit', null, true);
 
-        new CronJob('', () => {
-            var to = [];
-            var from = 'DoNotReply@bernbank.com';
 
-            var ses = new AWS.SES();
-            ses.sendEmail({
-                Source: from,
-                Destination: to,
-                Message: {
-                    Subject: {
-                        Data: 'Bernbank.com Weekly Donation Time!'
-                    },
-                    Body: {
-                        Html: {
-                            Data: "It's time to donate!"
-                        }
-                    }
-                }
-            }, function(err, data) {
-                if (err) {
-                    console.error(err);
-                }
-                console.log('Email sent:');
-                console.log(data);
-            });
+        new CronJob('', () => {
+            if (false) {
+                var client = ses.createClient(config.amazonSES);
+
+                var strTemplateHTML = pug.renderFile('./views/email-html.pug', data);
+                var strTemplateTEXT = pug.renderFile('./views/email-text.pug', data);
+                var objEmail = {
+                    to: data.email,
+                    from: 'no-reply@bernbank.com',
+                    subject: 'BernBank Donation Reminder',
+                    message: strTemplateHTML,
+                    altText: strTemplateTEXT
+                };
+
+                client.sendEmail(objEmail, (err, data, res) => {
+                    //console.log("EMAIL SENT!!!");
+                });
+            }
         }, null, true, 'America/Detroit', null, true);
     }
 };

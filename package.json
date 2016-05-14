@@ -6,7 +6,6 @@
     "start": "node ./bin/bernbank.js"
   },
   "dependencies": {
-    "aws-sdk": "^2.3.7",
     "body-parser": "~1.13.2",
     "cron": "^1.1.0",
     "express": "~4.13.1",
