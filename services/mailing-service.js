@@ -9,6 +9,7 @@ class MailingService {
 
     constructor(db) {
         this.mailinglist = db.collection('mailinglist');
+        this.pledges = db.collection('pledges');
     }
 
     /**
@@ -52,7 +53,8 @@ class MailingService {
         return new Promise((resolve, reject) => {
             var query = {email: strEmail};
             
-            this.mailinglist.update(query, {"$set" : {active: false} }, (err, results) => {
+            //this.mailinglist.update(query, {"$set" : {active: false} }, (err, results) => {
+            this.pledges.update(query, {"$set" : {emailSubscribed: false} }, (err, results) => {
                 if (err != null) {
                     reject(err);
                 } else {

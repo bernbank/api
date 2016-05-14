@@ -29,11 +29,13 @@ class PledgeService {
             precond.checkArgument(validator.isInt(pledge.amount + "", {min:1, max:10000}), 'Pledge amout must be an integer between 1 and 10000');
            
             pledge.added = new Date();
+            pledge.emailSubscribed = true;
 
             var query = {
                 'email' : pledge.email,
             }
             // Adding pledge email to mailing list
+            /*  /// Disabled this for now. We are going to ditch mailing completely.
             this.mailing.find(query , (err, thing) => {
                 
                 if (err == null) {
@@ -57,6 +59,7 @@ class PledgeService {
                 }
                 
             });
+			*/
 
             var query = {
                 'email' : pledge.email,
