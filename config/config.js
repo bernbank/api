@@ -1,4 +1,7 @@
 'use strict'
+var fs = require('fs');
+var userHome = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+var sesConfig = JSON.parse(fs.readFileSync(userHome + '/aws-ses-config.json'));
 
 module.exports = {
     mongo: {
@@ -6,5 +9,5 @@ module.exports = {
     },
     callThreshold: 30,
     nodeCache: { stdTTL: 600, checkperiod: 605 } ,
-    amazonSES: { key: process.env.SES_KEY, secret: process.env.SES_SECRET }
+    amazonSES: sesConfig
 };
