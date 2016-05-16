@@ -22,18 +22,9 @@ html
                 td
                   p Hello!
                   p It's time to fulfill the pledge you made to support the phone bankers working hard all around the country to get Bernie Sanders elected as the next President of the United States of America!
-                  p Here's last week's call breakdown:
-                    table
-                      thead
-                        tr
-                          th Date
-                          th Total Callers (30+ calls)
-                      tbody
-                        tr
-                          td 5/12
-                          td 110
-                  p That's a grand total of # callers who made more than 30 calls last week!  Since you pledged $ per caller, your total pledge amount is $$.  To make it as easy as possible for you to make your donation, we've created a donation link with the exact amount you've pledged automatically filled in for you!
-                    a(href="https://secure.actblue.com/contribute/page/bernbank?amount=") Click here to go the official campaign donation vendor (ActBlue) and make your donation!
+                  p Last week we had a grand total of #{totalCallers} callers who made more than #{threshold} calls!  Since you pledged #{pledgeAmount} cent(s) per caller, your total pledge amount is #{donationAmount}.  To make it as easy as possible for you to make your donation, we've created a donation link with the exact amount you've pledged automatically filled in for you!
+                  p
+                    a(href="https://secure.actblue.com/contribute/page/bernbank?amount=#{donationAmount}") Click here to go the official campaign donation vendor (ActBlue) and make your donation!
                   p Thank you for continuing to support Bernie Sanders and all of the hard working phone bankers.  With your continued help, we're well on our way to making Bernie's political revolution a reality!
                   p Thanks Again!
                   p - The BernBank Team
@@ -49,5 +40,5 @@ html
                 td(align="center")
                   p(class="unsubscribe")
                     | Don't like these annoying emails? 
-                    a(href="http://bernbank.com/actions/unsubscribe/" + email) Unsubscribe
+                    a(href="http://bernbank.com/actions/unsubscribe/#{email}") Unsubscribe
         td

@@ -22,3 +22,5 @@ router.get('/unsubscribe/:email',  (req, res) => {
     }).catch((e) => res.status(500).send(e.toString()));
 
 });
+
+module.exports = router;

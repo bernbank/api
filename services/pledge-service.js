@@ -4,6 +4,8 @@ var validator = require('validator');
 var moment = require('moment');
 var config = require('../config/config');
 var NodeCache = require('node-cache');
+var ses = require('node-ses');
+var pug = require('pug');
 var simpleNodeCache = new NodeCache(config.nodeCache);
 
 class PledgeService {
@@ -179,8 +181,6 @@ class PledgeService {
             }
           }
         });
-
-
       });
     }
 
@@ -209,6 +209,43 @@ class PledgeService {
                 } else {
                     resolve();
                 }
+            });
+        });
+    }
+
+    sendWeeklyEmailToPledges(totalCallers) {
+        return new Promise((resolve, reject) => {
+            var errors = [];
+            var client = ses.createClient(config.amazonSES);
+
+            this.pledges.find({"emailSubscribed": true}).forEach((pledge) => {
+                var data = {
+                    "totalCallers": totalCallers,
+                    "pledgeAmount": pledge.amount,
+                    "donationAmount": totalCallers * pledge.amount,
+                    "threshold": config.callThreshold,
+                    "email": pledge.email
+                };
+                var strTemplateHTML = pug.renderFile('../views/weekly-email-html.pug', data);
+                var strTemplateTEXT = pug.renderFile('../views/weekly-email-text.pug', data);
+                var objEmail = {
+                    to: data.email,
+                    from: 'no-reply@bernbank.com',
+                    subject: 'BernBank Donation Reminder',
+                    message: strTemplateHTML,
+                    altText: strTemplateTEXT
+                };
+
+                client.sendEmail(objEmail, (err, data, res) => {
+                    if (err) {
+                        errors.push(err);
+                    }
+                });
+            }, (error) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(errors);
             });
         });
     }
