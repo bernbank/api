@@ -213,6 +213,60 @@ class PledgeService {
     }
 
 
+    /**
+     * Gets real donated amount of money through ActBlue
+     **/
+    getDonated() {
+      return new Promise((resolve, reject) => {
+        simpleNodeCache.get("pledges-donated", (err, value) => {
+          if (!err) {
+            if (value != undefined) {
+              resolve(value);
+            } else {
+                var nTotalDonors;
+                var nTotalDonated;
+
+                var request = require('request');
+                request('https://secure.actblue.com/entity/fundraisers/39795', function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        var bError = true;
+                        var pattern = /BernBank<\/span>([\s\S]*?)<\/tr>/gm ;
+                        var matches = body.match(pattern);
+                        if (matches.length >= 1) {
+                            var strTmp = matches[0];
+                            var matches = strTmp.match(/(\d+)<\/span>/ig)
+                            if (matches.length >= 2) {
+                                var nTotalDonors = parseInt(matches[0]);
+                                var nTotalDonated = parseInt(matches[1]);
+                                bError = false;
+                            }
+                        }
+                        
+                        var donated = {
+                            "total-donors" : nTotalDonors,
+                            "total-donated" : nTotalDonated
+                        }
+                        
+                        if (bError) {
+                            reject({"error": "Page HTML changed..."});
+                        } else {
+                            simpleNodeCache.set("pledges-donated", donated  ,  (err, success) => {});
+                            resolve(donated);
+                        }
+                    } else {
+                        reject({"error": "Page could not be reached..."});
+                    }
+
+                });
+
+            }
+          }
+        });
+
+
+      });
+    }
+
     deletePledge(id) {
         return new Promise((resolve, reject) => {
             this.pledges.deleteOne({"email": id}).then(function (result) {

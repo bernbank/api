@@ -5,6 +5,21 @@ var PledgesController = require('../controllers/pledges-controller');
 var PledgeService = require('../services/pledge-service');
 var router = express.Router();
 
+router.get('/donated',(req, res) => {
+	
+  var mongoCache = new MongoCache();
+  mongoCache.getDb(config.mongo.connectionString).then(  (db) => {
+	  var pledgeService = new PledgeService(db);
+	  var pledgesController = new PledgesController(pledgeService);
+	  pledgesController.getDonated(req, res);
+  }).catch( (e) => {
+    res.status(500).send(e.toString());
+  });
+
+});
+
+
+
 /** 
  * Finds the total number of pledges that were made yesterday
  **/

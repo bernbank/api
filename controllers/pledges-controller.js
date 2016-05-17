@@ -91,6 +91,19 @@ class PledgesController {
     }
 
 
+    /**
+     * Gets real donated amount of money through ActBlue
+     **/
+    getDonated(req, res) {
+      this.pledgeService.getDonated()
+        .then( (donated) =>  {
+			res.status(200).json(donated);
+        })
+        .catch((e) => {
+           res.status(500).send(e);
+         });
+    }
+
 
 }
 

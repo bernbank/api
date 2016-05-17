@@ -107,6 +107,23 @@ Gets the total number of pledges for every day from all time
 ]
 ```
 
+### GET /api/pledges/donated
+Gets real donated amount of money through ActBlue
+#### Request
+
+##### Params
+
+#### Responses
+* 200 OK
+```json
+[
+  {
+    "total-donors": "number",
+    "total-donated": "number"
+  },
+]
+```
+
 ## Daily Call Logs Collection
 
 ### PUT /api/dailyCallLogs/:date
