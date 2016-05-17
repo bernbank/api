@@ -2,6 +2,7 @@
 var fs = require('fs');
 var userHome = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 var sesConfig = JSON.parse(fs.readFileSync(userHome + '/aws-ses-config.json'));
+sesConfig.amazon = 'https://email.us-west-2.amazonaws.com';
 
 module.exports = {
     mongo: {

@@ -215,7 +215,6 @@ class PledgeService {
 
     sendWeeklyEmailToPledges(totalCallers) {
         return new Promise((resolve, reject) => {
-            var errors = [];
             var client = ses.createClient(config.amazonSES);
 
             this.pledges.find({"emailSubscribed": true}).forEach((pledge) => {
@@ -238,14 +237,14 @@ class PledgeService {
 
                 client.sendEmail(objEmail, (err, data, res) => {
                     if (err) {
-                        errors.push(err);
+                        console.log(err);
                     }
                 });
             }, (error) => {
                 if (error) {
                     return reject(error);
                 }
-                resolve(errors);
+                resolve();
             });
         });
     }

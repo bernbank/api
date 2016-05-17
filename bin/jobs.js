@@ -34,13 +34,8 @@ module.exports = {
                 var berniePbClient = new BerniePbClient();
                 var dailyCallLogService = new DailyCallLogService(db, berniePbClient);
                 dailyCallLogService.getTotalCallersForLastWeek().then((totalCallers) => {
-                    pledgeService.sendWeeklyEmailToPledges(totalCallers).then((errors) => {
-                        if (errors && errors.length > 0) {
-                            console.error("Failed to send some emails");
-                            console.error(errors);
-                        } else {
-                            console.log("Successfully sent all weekly donation reminder emails")
-                        }
+                    pledgeService.sendWeeklyEmailToPledges(totalCallers).then(() => {
+                        console.log("Successfully attempted to send all weekly donation reminder emails");
                     }).catch((err) => {
                         console.error('Failed to send one or more weekly pledge emails');
                         console.error(err.stack);
