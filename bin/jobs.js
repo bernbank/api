@@ -27,7 +27,7 @@ module.exports = {
         }, null, true, 'America/Detroit', null, true);
 
 
-        new CronJob('00 00 21 * * 1', () => {  //Every Monday at 9pm
+        new CronJob('00 00 21 * * 3', () => {  //Every Wednesday at 9pm
             var mongoCache = new MongoCache();
             mongoCache.getDb(config.mongo.connectionString).then((db) => {
                 var pledgeService = new PledgeService(db);
@@ -48,6 +48,6 @@ module.exports = {
                 console.error('Failed to get mongo db connection');
                 console.error(err.stack);
             });
-        }, null, true, 'America/Detroit', null, true);
+        }, null, true, 'America/Detroit', null, false);
     }
 };

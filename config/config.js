@@ -1,4 +1,6 @@
-'use strict'
+'use strict';
+
+// NOTE: This config gets replaced with a production one as part of the deploy process.
 var fs = require('fs');
 var userHome = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 var sesConfig = JSON.parse(fs.readFileSync(userHome + '/aws-ses-config.json'));
