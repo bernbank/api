@@ -221,7 +221,7 @@ class PledgeService {
                 var data = {
                     "totalCallers": totalCallers,
                     "pledgeAmount": pledge.amount,
-                    "donationAmount": totalCallers * pledge.amount / 100,
+                    "donationAmount": (totalCallers * pledge.amount / 100).toFixed(2),
                     "threshold": config.callThreshold,
                     "email": pledge.email
                 };
