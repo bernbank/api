@@ -4,13 +4,14 @@ var validator = require('validator');
 var moment = require('moment');
 var config = require('../config/config');
 var NodeCache = require('node-cache');
+var ses = require('node-ses');
+var pug = require('pug');
 var simpleNodeCache = new NodeCache(config.nodeCache);
 
 class PledgeService {
 
     constructor(db) {
         this.pledges = db.collection('pledges');
-        this.mailing = db.collection('mailinglist');
     }
 
 
@@ -32,39 +33,12 @@ class PledgeService {
             pledge.emailSubscribed = true;
 
             var query = {
-                'email' : pledge.email,
-            }
-            // Adding pledge email to mailing list
-            /*  /// Disabled this for now. We are going to ditch mailing completely.
-            this.mailing.find(query , (err, thing) => {
-                
-                if (err == null) {
-                    var nTotal = 0;
-                    var email = { email: pledge.email , active: true} ;
-                    thing.each( (err, doc) => {
-                        if (doc == null) {
-                            if (nTotal == 0) {
-                                // This is a new email, we add it to mailing list
-                                this.mailing.insertOne(email, (err, result) => {
-                                    // Inserted email successfully or not
-                                });
-                            } else {
-                                // Email already exists
-                            }
-                        } else {
-                            // Email already exists
-                            nTotal += 1;
-                        }
-                    });
-                }
-                
-            });
-			*/
-
-            var query = {
-                'email' : pledge.email,
-            }
-            this.pledges.update(query, pledge,  {upsert:true} ).then((record) => {
+                'email' : pledge.email
+            };
+            var options = {
+                upsert: true
+            };
+            this.pledges.update(query, pledge, options).then((record) => {
                 var prom = this.getPledge(pledge.email);
                 prom.then((data) => {
                     resolve(data);
@@ -207,8 +181,6 @@ class PledgeService {
             }
           }
         });
-
-
       });
     }
 
@@ -273,6 +245,60 @@ class PledgeService {
                 resolve();
             }).catch((err) => {
                 reject(err);
+            });
+        });
+    }
+
+    /**
+     * (Soft) deletes en email from the mailinglist collection
+     **/
+    unsubscribeFromEmails(strEmail) {
+        return new Promise((resolve, reject) => {
+            var query = {email: strEmail};
+
+            //this.mailinglist.update(query, {"$set" : {active: false} }, (err, results) => {
+            this.pledges.update(query, {"$set" : {emailSubscribed: false} }, (err, results) => {
+                if (err != null) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
+
+    sendWeeklyEmailToPledges(totalCallers) {
+        return new Promise((resolve, reject) => {
+            var client = ses.createClient(config.amazonSES);
+
+            this.pledges.find({"emailSubscribed": true}).forEach((pledge) => {
+                var data = {
+                    "totalCallers": totalCallers,
+                    "pledgeAmount": pledge.amount,
+                    "donationAmount": (totalCallers * pledge.amount / 100).toFixed(2),
+                    "threshold": config.callThreshold,
+                    "email": pledge.email
+                };
+                var strTemplateHTML = pug.renderFile('../views/weekly-email-html.pug', data);
+                var strTemplateTEXT = pug.renderFile('../views/weekly-email-text.pug', data);
+                var objEmail = {
+                    to: data.email,
+                    from: 'no-reply@bernbank.com',
+                    subject: 'BernBank Donation Reminder',
+                    message: strTemplateHTML,
+                    altText: strTemplateTEXT
+                };
+
+                client.sendEmail(objEmail, (err, data, res) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            }, (error) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve();
             });
         });
     }

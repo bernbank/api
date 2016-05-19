@@ -67,6 +67,20 @@ class DailyCallLogService {
         });
     }
 
+    getTotalCallersForLastWeek() {
+        return new Promise((resolve, reject) => {
+            var total = 0;
+            this.dailyCallLogs.find().sort({_id: -1}).limit(7).forEach((callLog) => {
+                total += callLog.total;
+            }, (error) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(total);
+            });
+        });
+    }
+
     getTotalByDate(date) {
         return new Promise((resolve, reject) => {
             var dateString = moment(date).format('YYYY-MM-DD');
@@ -98,12 +112,8 @@ class DailyCallLogService {
                     }
                 }
             });
-
-
-
         });
     }
-
 }
 
 module.exports = DailyCallLogService;

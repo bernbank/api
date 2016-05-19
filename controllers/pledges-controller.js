@@ -104,6 +104,16 @@ class PledgesController {
          });
     }
 
+    /**
+     * (Soft) deletes an email from the  mailinglist collection
+     **/
+    unsubscribeFromEmails(req, res) {
+        this.pledgeService.unsubscribeFromEmails(req.params.email)
+            .then(() => {
+                res.redirect(301, 'http://bernbank.com/');
+            })
+            .catch((e) => res.status(500).send(e));
+    }
 
 }
 
