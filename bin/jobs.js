@@ -27,7 +27,7 @@ module.exports = {
         }, null, true, 'America/Detroit', null, true);
 
 
-        new CronJob('00 00 21 * * 3', () => {  //Every Wednesday at 9pm
+        new CronJob('00 00 21 * * 4', () => {  //Every Wednesday at 9pm
             var mongoCache = new MongoCache();
             mongoCache.getDb(config.mongo.connectionString).then((db) => {
                 var pledgeService = new PledgeService(db);
