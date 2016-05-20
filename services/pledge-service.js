@@ -279,8 +279,8 @@ class PledgeService {
                     "threshold": config.callThreshold,
                     "email": pledge.email
                 };
-                var strTemplateHTML = pug.renderFile('../views/weekly-email-html.pug', data);
-                var strTemplateTEXT = pug.renderFile('../views/weekly-email-text.pug', data);
+                var strTemplateHTML = pug.renderFile('./views/weekly-email-html.pug', data);
+                var strTemplateTEXT = pug.renderFile('./views/weekly-email-text.pug', data);
                 var objEmail = {
                     to: data.email,
                     from: 'no-reply@bernbank.com',
