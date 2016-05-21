@@ -67,10 +67,20 @@ class DailyCallLogService {
         });
     }
 
-    getTotalCallersForLastWeek() {
+    getTotalCallersForDateRange(startDate, endDate) {
+        var days = [];
+        var currentFormattedDate = moment(startDate).format('YYYY-MM-DD');
+        var formattedEndDate = moment(endDate).format('YYYY-MM-DD');
+        var counter = 0;
+        while (currentFormattedDate != formattedEndDate) {
+            currentFormattedDate = moment(startDate).add(counter, 'days').format('YYYY-MM-DD');
+            days.push(currentFormattedDate);
+            counter++;
+        }
+
         return new Promise((resolve, reject) => {
             var total = 0;
-            this.dailyCallLogs.find().sort({_id: -1}).limit(7).forEach((callLog) => {
+            this.dailyCallLogs.find({ date: { $in: days }}).forEach((callLog) => {
                 total += callLog.total;
             }, (error) => {
                 if (error) {

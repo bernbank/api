@@ -33,7 +33,10 @@ module.exports = {
                 var pledgeService = new PledgeService(db);
                 var berniePbClient = new BerniePbClient();
                 var dailyCallLogService = new DailyCallLogService(db, berniePbClient);
-                dailyCallLogService.getTotalCallersForLastWeek().then((totalCallers) => {
+
+                var startDate = moment().subtract(7, 'days').toDate();
+                var endDate = new Date();
+                dailyCallLogService.getTotalCallersForDateRange(startDate, endDate).then((totalCallers) => {
                     pledgeService.sendWeeklyEmailToPledges(totalCallers).then(() => {
                         console.log("Successfully attempted to send all weekly donation reminder emails");
                     }).catch((err) => {

@@ -41,6 +41,16 @@ class DailyCallLogsController {
          });
     }
 
+    getTotalForCurrentWeek(req, res) {
+        var thursday = moment().startOf('week').add(4, 'days').toDate();
+        var today = new Date();
+        this.dailyCallLogService.getTotalCallersForDateRange(thursday, today).then( (data) => {
+            res.status(200).send(data.toString());
+        }).catch((e) => {
+            res.status(500).send(e);
+        });
+    }
+
 }
 
 module.exports = DailyCallLogsController;

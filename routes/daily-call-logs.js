@@ -31,6 +31,16 @@ router.get('/total', (req,res) => {
     }
 });
 
+router.get('/currentWeekTotal', (req, res) => {
+    var mongoCache = new MongoCache();
+    mongoCache.getDb(config.mongo.connectionString).then((db) => {
+        var berniePbClient = new BerniePbClient();
+        var dailyCallLogsService = new DailyCallLogService(db, berniePbClient);
+        var dailyCallLogsController = new DailyCallLogsController(dailyCallLogsService);
+        dailyCallLogsController.getTotalForCurrentWeek(req, res);
+    }).catch((e) => res.status(500).send(e.toString()));
+});
+
 router.put('/:date', (req, res) => {
     var mongoCache = new MongoCache();
     mongoCache.getDb(config.mongo.connectionString).then((db) => {
