@@ -72,9 +72,7 @@ class DailyCallLogService {
         var currentFormattedDate = moment(startDate).format('YYYY-MM-DD');
         var formattedEndDate = moment(endDate).format('YYYY-MM-DD');
         var counter = 0;
-        console.log("formattedEndDate:" + formattedEndDate);
         while (currentFormattedDate != formattedEndDate) {
-            console.log("currentFormattedDate:" + currentFormattedDate);
             currentFormattedDate = moment(startDate).add(counter, 'days').format('YYYY-MM-DD');
             days.push(currentFormattedDate);
             counter++;
