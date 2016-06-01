@@ -267,19 +267,21 @@ class PledgeService {
         });
     }
 
-    sendWeeklyEmailToPledges(totalCallers) {
+    sendWeeklyEmailToPledges(totalCallers,donated) {
         return new Promise((resolve, reject) => {
             var client = ses.createClient(config.amazonSES);
 
             this.pledges.find({"emailSubscribed": true}).forEach((pledge) => {
                 var data = {
                     "totalCallers": totalCallers,
+                    "totalDonated":(donated["total-donated"]*.01).toFixed(2),
                     "pledgeAmount": pledge.amount,
                     "donationAmount": (totalCallers * pledge.amount / 100).toFixed(2),
                     "threshold": config.callThreshold,
                     "email": pledge.email
                 };
                 var strTemplateHTML = pug.renderFile('./views/weekly-email-html.pug', data);
+                console.log(strTemplateHTML);
                 var strTemplateTEXT = pug.renderFile('./views/weekly-email-text.pug', data);
                 var objEmail = {
                     to: data.email,

@@ -38,11 +38,16 @@ module.exports = {
                 var startDate = moment().subtract(7, 'days').toDate();
                 var endDate = new Date();
                 dailyCallLogService.getTotalCallersForDateRange(startDate, endDate).then((totalCallers) => {
-                    pledgeService.sendWeeklyEmailToPledges(totalCallers).then(() => {
-                        console.log("Successfully attempted to send all weekly donation reminder emails");
+                    pledgeService.getDonated().then((donated) => {
+                       pledgeService.sendWeeklyEmailToPledges(totalCallers,donated).then(() => {
+                           console.log("Successfully attempted to send all weekly donation reminder emails");
+                       }).catch((err) => {
+                           console.error('Failed to send one or more weekly pledge emails');
+                           console.error(err.stack);
+                       });
                     }).catch((err) => {
-                        console.error('Failed to send one or more weekly pledge emails');
-                        console.error(err.stack);
+                    console.error('Failed to fetch donations from ActBlue');
+                    console.error(err.stack);                       
                     });
                 }).catch((err) => {
                     console.error('Failed to fetch total callers for last week');
