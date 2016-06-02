@@ -281,7 +281,6 @@ class PledgeService {
                     "email": pledge.email
                 };
                 var strTemplateHTML = pug.renderFile('./views/weekly-email-html.pug', data);
-                console.log(strTemplateHTML);
                 var strTemplateTEXT = pug.renderFile('./views/weekly-email-text.pug', data);
                 var objEmail = {
                     to: data.email,
