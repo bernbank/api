@@ -212,7 +212,10 @@ class PledgeService {
                                 var nTotalDonated = parseInt(matches[1]);
                                 bError = false;
                             }
+                        } else {
+                                reject({"error": "No donation information found..."});
                         }
+
                         
                         var donated = {
                             "total-donors" : nTotalDonors,
