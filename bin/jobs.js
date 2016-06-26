@@ -27,6 +27,7 @@ module.exports = {
         }, null, true, 'America/Detroit', null, true);
 
 
+        /*
         //NOTE: If we change what day this job runs on, we need to update /dailyCallLogs/currentWeekTotal as well
         new CronJob('00 00 21 * * 4', () => {  //Every Thursday at 9pm
             var mongoCache = new MongoCache();
@@ -58,5 +59,8 @@ module.exports = {
                 console.error(err.stack);
             });
         }, null, true, 'America/Detroit', null, false);
+        */
+        
+        
     }
 };
